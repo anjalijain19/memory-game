@@ -91,7 +91,7 @@ $(document).ready(function(e){
         let thisCard=$(this).attr('data-card'); //clicked card value
         let thisCardId=$(this).attr('id');//clicked card's id
 
-        if(thisCardId!==lastClickCardId) // clicked card is not same as last click increment moves
+        if(thisCardId!==lastClickCardId && !$(this).hasClass('match')) // clicked card is not same as last click increment moves
             totalMoves++;
 
         $('.moves').text(totalMoves);

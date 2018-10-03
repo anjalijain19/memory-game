@@ -1,8 +1,11 @@
 /*
  * Create a list that holds all of your cards
  */
-
-
+let allCards=['diamond','paper-plane-o','anchor','bolt','cube','leaf','bicycle','bomb','diamond','paper-plane-o','anchor','bolt','cube','leaf','bicycle','bomb'];
+let openCards=[];
+let matchedCards=[];
+let totalMoves=0;
+let lastClickCardId='';
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -12,7 +15,7 @@
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -25,6 +28,122 @@ function shuffle(array) {
     return array;
 }
 
+function displayCards(cards)
+{
+    let cardsHtml='';
+    $(cards).each(function(index,value){
+        cardsHtml+=`<li id="${index}" class="card" data-card="${value}"><i class="fa fa-${value}"></i></li>`;
+    });
+    $('.deck').html(cardsHtml);
+}
+
+function restartGame()
+{
+    openCards=[];
+    matchedCards=[];
+    totalMoves=0;
+    lastClickCardId='';
+    $('.card').removeClass('open show match');
+    $('.moves').text(totalMoves);
+    $('.starRating').text(3);
+    $('.stars').html(`<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>  `);
+}
+
+function updateStarRating()
+{
+    if(totalMoves>=51)
+    {
+        if($('.stars li').length>1)
+        {
+            $('.starRating').text(2);
+            $('.stars li').last().remove();
+        }
+    }
+    else if(totalMoves>=25 && totalMoves<=50)
+    {
+        if($('.stars li').length>2) {
+            $('.starRating').text(2);
+            $('.stars li').last().remove();
+        }
+    }
+    else
+    {
+        $('.starRating').text(3);
+    }
+}
+
+function isWon()
+{
+    if(matchedCards.length==allCards.length)
+    {
+        $('.deck').hide();
+        $('.score-panel').hide();
+        $('#won').show();
+    }
+}
+
+$(document).ready(function(e){
+    allCards=shuffle(allCards);
+    displayCards(allCards);
+    //card click event handler
+    $('.card').on('click',function(){
+        let thisCard=$(this).attr('data-card'); //clicked card value
+        let thisCardId=$(this).attr('id');//clicked card's id
+        if(thisCardId!==lastClickCardId) // clicked card is not same as last click increment moves
+            totalMoves++;
+
+        $('.moves').text(totalMoves);
+
+        updateStarRating();
+
+        if(openCards.length<=2) {
+            if($.inArray(thisCard,openCards)==-1) {
+                $(this).addClass('open show');
+                openCards.push(thisCard);
+            }
+            else
+            {
+                if(thisCardId!==lastClickCardId) {
+                    openCards.splice($.inArray(thisCard,openCards),1);
+                    matchedCards.push(thisCard);
+                    $(this).addClass('match');
+                    $('.card[data-card=' + thisCard + ']').removeClass('open show');
+                    $('.card[data-card=' + thisCard + ']').addClass('match');
+                    isWon();
+                }
+            }
+        }
+        else
+        {
+            let open= openCards;
+            openCards=[];
+            $(open).each(function(value){
+                $('.card.open').removeClass('open show');
+
+            });
+        }
+        lastClickCardId=$(this).attr('id');
+        setTimeout(function(){
+            if(openCards.length==2){
+                $('.open.show').removeClass('open show');
+            }
+        },200);
+        $(this).addClass('open show');
+
+    });
+
+    //restart game
+    $('.restart').on('click',function(){
+        restartGame();
+    });
+
+    $('#playAgain').on('click',function(){
+        $('.deck').show();
+        $('.score-panel').show();
+        $('#won').hide();
+        restartGame();
+    });
+});
 
 /*
  * set up the event listener for a card. If a card is clicked:

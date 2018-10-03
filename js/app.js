@@ -51,7 +51,6 @@ function restartGame()
 
 function updateStarRating()
 {
-    console.log($('.stars li .fa-star').length);
     if(totalMoves>=51)
     {
         if($('.stars li .fa-star').length>1)
@@ -107,6 +106,7 @@ $(document).ready(function(e){
             {
                 if(thisCardId!==lastClickCardId) {
                     openCards.splice($.inArray(thisCard,openCards),1);
+                    matchedCards.push(thisCard);
                     matchedCards.push(thisCard);
                     $(this).addClass('match');
                     $('.card[data-card=' + thisCard + ']').removeClass('open show');

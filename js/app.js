@@ -110,7 +110,6 @@ function startTimer () {
 
     }
     if (tens > 99) {
-        console.log("seconds");
         seconds++;
         $('#seconds').html("0" + seconds);
         tens = 0;

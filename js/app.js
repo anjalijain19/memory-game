@@ -91,7 +91,7 @@ $(document).ready(function(e){
         let thisCard=$(this).attr('data-card'); //clicked card value
         let thisCardId=$(this).attr('id');//clicked card's id
 
-        if(thisCardId!==lastClickCardId && !$(this).hasClass('match')) // clicked card is not same as last click increment moves
+        if(!$(this).hasClass('open') && !$(this).hasClass('match')) // clicked card is not same as last click increment moves
             totalMoves++;
 
         $('.moves').text(totalMoves);
@@ -115,19 +115,12 @@ $(document).ready(function(e){
                 }
             }
         }
-        else
-        {
-            let open= openCards;
-            openCards=[];
-            $(open).each(function(value){
-                $('.card.open').removeClass('open show');
 
-            });
-        }
         lastClickCardId=$(this).attr('id');
         setTimeout(function(){
             if(openCards.length==2){
                 $('.open.show').removeClass('open show');
+                openCards=[];
             }
         },200);
     });

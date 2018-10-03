@@ -60,7 +60,7 @@ function updateStarRating()
             $('.stars li').last().find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
-    else if(totalMoves>=5 && totalMoves<=50)
+    else if(totalMoves>=25 && totalMoves<=50)
     {
         if($('.stars li .fa-star').length>2) {
             $('.starRating').text(2);

@@ -56,15 +56,15 @@ function updateStarRating()
     {
         if($('.stars li .fa-star').length>1)
         {
-            $('.starRating').text(2);
-            $('.stars li').last().find('i').removeClass('fa-star').addClass('fa-star-o');
+            $('.starRating').text(1);
+            $('.stars li:nth-last-child(2)').find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
     else if(totalMoves>=25 && totalMoves<=50)
     {
         if($('.stars li .fa-star').length>2) {
             $('.starRating').text(2);
-            $('.stars li').last().find('i').removeClass('fa-star').addClass('fa-star-o');
+            $('.stars li').last('.fa-star').find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
     else
@@ -75,7 +75,7 @@ function updateStarRating()
 
 function isWon()
 {
-    if(matchedCards.length==allCards.length)
+    if(matchedCards.length>=allCards.length)
     {
         $('.deck').hide();
         $('.score-panel').hide();

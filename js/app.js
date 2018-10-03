@@ -46,24 +46,25 @@ function restartGame()
     $('.card').removeClass('open show match');
     $('.moves').text(totalMoves);
     $('.starRating').text(3);
-    $('.stars').html(`<li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li><li><i class="fa fa-star"></i></li>  `);
+    $('.stars li i').removeClass('fa-star-o').addClass('fa-star');
 }
 
 function updateStarRating()
 {
+    console.log($('.stars li .fa-star').length);
     if(totalMoves>=51)
     {
-        if($('.stars li').length>1)
+        if($('.stars li .fa-star').length>1)
         {
             $('.starRating').text(2);
-            $('.stars li').last().remove();
+            $('.stars li').last().find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
-    else if(totalMoves>=25 && totalMoves<=50)
+    else if(totalMoves>=5 && totalMoves<=50)
     {
-        if($('.stars li').length>2) {
+        if($('.stars li .fa-star').length>2) {
             $('.starRating').text(2);
-            $('.stars li').last().remove();
+            $('.stars li').last().find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
     else

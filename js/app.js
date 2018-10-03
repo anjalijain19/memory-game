@@ -89,6 +89,7 @@ $(document).ready(function(e){
     $('.card').on('click',function(){
         let thisCard=$(this).attr('data-card'); //clicked card value
         let thisCardId=$(this).attr('id');//clicked card's id
+
         if(thisCardId!==lastClickCardId) // clicked card is not same as last click increment moves
             totalMoves++;
 
@@ -96,7 +97,7 @@ $(document).ready(function(e){
 
         updateStarRating();
 
-        if(openCards.length<=2) {
+        if(openCards.length<2) {
             if($.inArray(thisCard,openCards)==-1) {
                 $(this).addClass('open show');
                 openCards.push(thisCard);
@@ -128,8 +129,6 @@ $(document).ready(function(e){
                 $('.open.show').removeClass('open show');
             }
         },200);
-        $(this).addClass('open show');
-
     });
 
     //restart game

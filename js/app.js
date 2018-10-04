@@ -1,15 +1,23 @@
 /*
  * Create a list that holds all of your cards
  */
-let allCards=['diamond','paper-plane-o','anchor','bolt','cube','leaf','bicycle','bomb','diamond','paper-plane-o','anchor','bolt','cube','leaf','bicycle','bomb'];
+let allCards=['diamond','paper-plane-o','anchor','bolt','cube','leaf','bicycle','bomb'];
+allCards = allCards.concat(allCards);
 let openCards=[];
 let matchedCards=[];
 let totalMoves=0;
 let lastClickCardId='';
-let seconds = 00;
-let tens = 00;
-let mins = 00;
-let Interval;
+
+let timer = new Timer();
+timer.addEventListener('secondsUpdated', function (e) {
+    $('.timer .values').html(timer.getTimeValues().toString());
+});
+timer.addEventListener('started', function (e) {
+    $('.timer .values').html(timer.getTimeValues().toString());
+});
+timer.addEventListener('reset', function (e) {
+    $('.timer.values').html(timer.getTimeValues().toString());
+});
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -36,11 +44,12 @@ function displayCards(cards)
 {
     let cardsHtml='';
     $(cards).each(function(index,value){
-        cardsHtml+=`<li id="${index}" class="card" data-card="${value}"><i class="fa fa-${value}"></i></li>`;
+        cardsHtml+=`<li id="${index}" class="card" data-card="${value}">
+                        <i class="fa fa-${value}"></i>
+                    </li>`;
     });
     $('.deck').html(cardsHtml);
-    clearInterval(Interval);
-    Interval = setInterval(startTimer, 10);
+    timer.start();
 }
 
 function restartGame()
@@ -49,19 +58,14 @@ function restartGame()
     matchedCards=[];
     totalMoves=0;
     lastClickCardId='';
-    clearInterval(Interval);
-    tens = "00";
-    seconds = "00";
-    mins="00";
-    $('#tens').html(tens);
-    $('#seconds').html(seconds);
-    $('#mins').html(mins);
-
     $('.card').removeClass('open show match');
     $('.moves').text(totalMoves);
     $('.starRating').text(3);
     $('.time').html('');
     $('.stars li i').removeClass('fa-star-o').addClass('fa-star');
+    timer.stop();
+    allCards=shuffle(allCards);
+    displayCards(allCards);
 }
 
 function updateStarRating()
@@ -91,52 +95,27 @@ function isWon()
 {
     if(matchedCards.length>=allCards.length)
     {
-        clearInterval(Interval);
-        $('.deck').hide();
-        $('.score-panel').hide();
-        $('.time').html($('.timer').html());
-        $('#won').show();
+        timer.stop();
+        let rating=$('.starRating').text();
+        let time=$('.timer').text();
+        swal({
+            title: 'Congratulations! you won!',
+            text: `With ${totalMoves} and ${rating} Stars
+        ${time}`,
+            type: 'success',
+            confirmButtonText: 'Play again'
+        }).then(function() {
+            restartGame();
+        });
     }
 }
 
-//start timer
-function startTimer () {
-    tens++;
-    if(tens < 9){
-        $('#tens').html("0" + tens);
-    }
-    if (tens > 9){
-        $('#tens').html(tens);
-
-    }
-    if (tens > 99) {
-        seconds++;
-        $('#seconds').html("0" + seconds);
-        tens = 0;
-        $('#tens').html("00");
-    }
-    if (seconds > 9){
-        $('#seconds').html(seconds);
-    }
-    if(seconds > 59)
-    {
-        mins++;
-        $('#mins').html("0" + mins);
-        tens = 0;
-        seconds = 0;
-        $('#seconds').html("00");
-        $('#tens').html("00");
-    }
-    if (mins > 9){
-        $('#mins').html(mins);
-    }
-}
 
 $(document).ready(function(e){
     allCards=shuffle(allCards);
     displayCards(allCards);
     //card click event handler
-    $('.card').on('click',function(){
+    $('.deck').on('click','.card',function(){
         let thisCard=$(this).attr('data-card'); //clicked card value
         let thisCardId=$(this).attr('id');//clicked card's id
 
@@ -187,14 +166,3 @@ $(document).ready(function(e){
         restartGame();
     });
 });
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */

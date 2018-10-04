@@ -7,10 +7,10 @@
 
 ### Prerequisites
 
-jquery version 3.3
-easytimer.js version: 2.3.0
-font-awesome version 4.6.1
-sweetAlert2
+* jquery version 3.3
+* easytimer.js version: 2.3.0
+* font-awesome version 4.6.1
+* sweetAlert2
 
 ## Instructions
 Click a card and try to find its matching card, if card matches it we remain open and if not both the cards will flip back.Try to remain the position and find all matching cards.

@@ -7,6 +7,7 @@ let openCards=[];
 let matchedCards=[];
 let totalMoves=0;
 let lastClickCardId='';
+let rating=3;
 
 let timer = new Timer();
 timer.addEventListener('secondsUpdated', function (e) {
@@ -74,20 +75,20 @@ function updateStarRating()
     {
         if($('.stars li .fa-star').length>1)
         {
-            $('.starRating').text(1);
+            rating=1;
             $('.stars li:nth-last-child(2)').find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
     else if(totalMoves>=25 && totalMoves<=50)
     {
         if($('.stars li .fa-star').length>2) {
-            $('.starRating').text(2);
+            rating=2;
             $('.stars li').last('.fa-star').find('i').removeClass('fa-star').addClass('fa-star-o');
         }
     }
     else
     {
-        $('.starRating').text(3);
+        rating=3;
     }
 }
 
@@ -96,11 +97,10 @@ function isWon()
     if(matchedCards.length>=allCards.length)
     {
         timer.stop();
-        let rating=$('.starRating').text();
         let time=$('.timer').text();
         swal({
             title: 'Congratulations! you won!',
-            text: `With ${totalMoves} and ${rating} Stars
+            text: `With ${totalMoves} moves and ${rating} Stars
         ${time}`,
             type: 'success',
             confirmButtonText: 'Play again'
